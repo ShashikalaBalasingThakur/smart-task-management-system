@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Task Manager</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Smart Task Management System</h1>
+
+        <h2>Analytics Dashboard</h2>
+
+        <div class="analytics">
+
+            <p>Total Tasks: {{ total_tasks }}</p>
+
+            <p>Completed Tasks: {{ completed_tasks }}</p>
+
+            <p>Pending Tasks: {{ pending_tasks }}</p>
+
+            <p>
+                Completion Percentage:
+                {{ completion_percentage }}%
+            </p>
+
+        </div>
+
+        <h2>Add Task</h2>
+
+        <form method="POST"
+              action="/add_task">
+
+            <input type="text"
+                   name="title"
+                   placeholder="Task Title"
+                   required>
+
+            <textarea name="description"
+                      placeholder="Task Description"
+                      required></textarea>
+
+            <input type="text"
+                   name="priority"
+                   placeholder="Priority"
+                   required>
+
+            <input type="text"
+                   name="status"
+                   placeholder="Status"
+                   required>
+
+            <button type="submit">
+                Add Task
+            </button>
+
+        </form>
+
+        <h2>Task List</h2>
+
+        <ul>
+
+            {% for task in tasks %}
+
+            <li>
+
+                <strong>{{ task.title }}</strong>
+
+                <br>
+
+                {{ task.description }}
+
+                <br>
+
+                Priority: {{ task.priority }}
+
+                <br>
+
+                Status: {{ task.status }}
+
+                <br><br>
+                <a href="/edit_task/{{ task.id }}">
+                    Update
+                </a>
+
+                <br><br>
+
+                <a href="/delete_task/{{ task.id }}">
+                     Delete
+                </a>
+
+                
+
+            </li>
+
+            <br>
+
+            {% endfor %}
+
+        </ul>
+
+        <br>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+<script>
+
+    var socket = io();
+
+    socket.on("task_update", function(data) {
+
+        alert(data.message);
+
+    });
+
+</script>
+
+</body>
+</html>
